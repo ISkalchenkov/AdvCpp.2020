@@ -5,12 +5,11 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
-#include <string>
-#include <iostream>
-#include <unistd.h>
-#include <sys/wait.h>
+#include "Descriptor.h"
 
-namespace proc{
+#include <string>
+
+namespace proc {
 
 class Process {
 public:
@@ -25,10 +24,10 @@ public:
     void close();
 
 private:
-    int p2c_pipefd[2];
-    int c2p_pipefd[2];
-    bool is_readable;
-    pid_t pid;
+    Descriptor read_fd_;
+    Descriptor write_fd_;
+    bool is_readable_;
+    pid_t pid_;
 
 };
 
