@@ -15,7 +15,7 @@ int main() {
         proc::Process process(path);
         process.writeExact(hello.c_str(), hello.size());
         process.closeStdin();
-        process.readExact(&buf[0], hello.size());
+        process.readExact(buf.data(), hello.size());
         process.close();
     }
     catch (const proc::ProcessError& err) {
