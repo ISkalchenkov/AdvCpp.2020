@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "StderrLogger.hpp"
+#include "LogModifier.hpp"
 
 namespace log {
 
@@ -13,7 +14,7 @@ void StderrLogger::flush() noexcept {
 
 void StderrLogger::log(const std::string &msg, Level lvl) noexcept {
     if (lvl >= level()) {
-        std::cerr << msg << std::endl;
+        std::cerr << LogModifier::get_instance().formate(msg, lvl) << std::endl;
     }
 }
 

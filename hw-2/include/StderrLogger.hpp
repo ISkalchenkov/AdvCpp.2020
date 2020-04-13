@@ -1,7 +1,3 @@
-//
-// Created by antarctica on 03.04.2020.
-//
-
 #ifndef STDERR_LOGGER_H
 #define STDERR_LOGGER_H
 
@@ -26,6 +22,6 @@ private:
     void log(const std::string& msg, Level lvl) noexcept override;
 };
 
-};
+} // namespace log
 
 #endif // STDERR_LOGGER_H

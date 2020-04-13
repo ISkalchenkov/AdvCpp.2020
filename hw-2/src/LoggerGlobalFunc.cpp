@@ -37,4 +37,24 @@ BaseLoggerPtr create_stderr_logger(Level lvl) {
     return std::make_unique<StderrLogger>(lvl);
 }
 
+void init(BaseLoggerPtr logger) {
+    Logger::get_instance().set_global_logger(std::move(logger));
+}
+
+void set_color_mod(Modification mod) {
+    LogModifier::get_instance().set_color_mod(mod);
+}
+
+void set_weight_mod(Modification mod) {
+    LogModifier::get_instance().set_weight_mod(mod);
+}
+
+void set_time_mod(Modification mod) {
+    LogModifier::get_instance().set_time_mod(mod);
+}
+
+void set_all_mod(Modification mod) {
+    LogModifier::get_instance().set_all_mod(mod);
+}
+
 } // namespace log

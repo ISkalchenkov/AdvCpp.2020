@@ -1,7 +1,3 @@
-//
-// Created by antarctica on 03.04.2020.
-//
-
 #ifndef STDOUT_LOGGER_H
 #define STDOUT_LOGGER_H
 

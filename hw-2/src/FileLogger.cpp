@@ -1,4 +1,5 @@
 #include "FileLogger.hpp"
+#include "LogModifier.hpp"
 
 namespace log {
 
@@ -15,7 +16,7 @@ void FileLogger::flush() noexcept {
 
 void FileLogger::log(const std::string &msg, Level lvl) noexcept {
     if (lvl >= level()) {
-        file_out_ << msg << std::endl;
+        file_out_ << LogModifier::get_instance().formate(msg, lvl) << std::endl;
     }
 }
 

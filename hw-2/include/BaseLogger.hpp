@@ -22,7 +22,7 @@ public:
     void info(const std::string& msg) noexcept;
     void warn(const std::string& msg) noexcept;
     void error(const std::string& msg) noexcept;
-\
+
     void set_level(Level lvl) noexcept;
     Level level() const noexcept;
     virtual void flush() noexcept = 0;
