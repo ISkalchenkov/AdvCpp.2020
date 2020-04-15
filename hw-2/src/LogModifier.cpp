@@ -6,11 +6,14 @@ namespace escapeCode {
     const char* RESET = "\x1b[0m";
 
     const char* BOLD = "\x1b[1m";
+    const char* DEFAULT_WEIGHT = "\x1b[22m";
 
     const char* RED = "\x1b[31m";
     const char* YELLOW = "\x1b[33m";
     const char* BLUE = "\x1b[36m";
     const char* WHITE = "\x1b[37m";
+    const char* DEFAULT_COLOR = "\x1b[39m";
+
 } // namespace escapeCode
 
 
@@ -60,7 +63,10 @@ std::string LogModifier::formate(const std::string msg, Level lvl) noexcept {
     level_fmt(fmt_message, lvl);
     fmt_message << msg;
     if (color_ == Modification::ON) {
-        fmt_message << escapeCode::RESET;
+        fmt_message << escapeCode::DEFAULT_COLOR;
+    }
+    if (weight_ == Modification::ON) {
+        fmt_message << escapeCode::DEFAULT_WEIGHT;
     }
 
     return fmt_message.str();
