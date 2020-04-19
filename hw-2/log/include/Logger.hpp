@@ -14,7 +14,7 @@ public:
     static Logger& get_instance() noexcept;
 
     BaseLogger& get_global_logger() const noexcept;
-    void set_global_logger(BaseLoggerPtr logger) noexcept;
+    void set_global_logger(BaseLoggerPtr logger);
 
     Logger(const Logger& rhs) = delete;
     Logger& operator=(const Logger& rhs) = delete;

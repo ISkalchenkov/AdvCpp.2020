@@ -23,11 +23,6 @@ LogModifier::LogModifier() noexcept
     , time_ (Modification::OFF) {
 }
 
-LogModifier& LogModifier::get_instance() noexcept {
-    static LogModifier instance;
-    return instance;
-}
-
 void LogModifier::set_color_mod(Modification mod) noexcept {
     color_ = mod;
 }
@@ -46,7 +41,7 @@ void LogModifier::set_all_mod(Modification mod) noexcept {
     time_ = mod;
 }
 
-std::string LogModifier::formate(const std::string msg, Level lvl) noexcept {
+std::string LogModifier::format(const std::string& msg, Level lvl) noexcept {
     std::ostringstream fmt_message;
     if (time_ == Modification::ON) {
         time_fmt(fmt_message);

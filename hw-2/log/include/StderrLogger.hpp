@@ -9,12 +9,7 @@ class StderrLogger: public BaseLogger {
 public:
     StderrLogger() = default;
     explicit StderrLogger(Level lvl) noexcept;
-
-    StderrLogger(const StderrLogger& rhs) = delete;
-    StderrLogger& operator=(const StderrLogger& rhs) = delete;
-
-    StderrLogger(StderrLogger&& rhs) = delete;
-    StderrLogger&& operator=(StderrLogger&& rhs) = delete;
+    explicit StderrLogger(Level lvl, const LogModifier& mod) noexcept;
 
     void flush() noexcept override;
 

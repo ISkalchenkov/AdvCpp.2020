@@ -1,11 +1,15 @@
 #include <iostream>
 
 #include "StderrLogger.hpp"
-#include "LogModifier.hpp"
 
 namespace log {
 
-StderrLogger::StderrLogger(Level lvl) noexcept: BaseLogger(lvl) {
+StderrLogger::StderrLogger(Level lvl) noexcept
+    : BaseLogger(lvl) {
+}
+
+StderrLogger::StderrLogger(Level lvl, const LogModifier& mod) noexcept
+    : BaseLogger(lvl, mod) {
 }
 
 void StderrLogger::flush() noexcept {
@@ -14,7 +18,7 @@ void StderrLogger::flush() noexcept {
 
 void StderrLogger::log(const std::string &msg, Level lvl) noexcept {
     if (lvl >= level()) {
-        std::cerr << LogModifier::get_instance().formate(msg, lvl) << std::endl;
+        std::cerr << mod_.format(msg, lvl) << std::endl;
     }
 }
 

@@ -10,13 +10,15 @@ namespace log {
 class FileLogger : public BaseLogger {
 public:
     FileLogger() noexcept;
+
     explicit FileLogger(const std::string& file_path, Level lvl) noexcept;
+    explicit FileLogger(const std::string& file_path, Level lvl, const LogModifier& mod) noexcept;
 
     FileLogger(const FileLogger& rhs) = delete;
     FileLogger& operator=(const FileLogger& rhs) = delete;
 
-    FileLogger(FileLogger&& rhs) = delete;
-    FileLogger& operator=(FileLogger&& rhs) = delete;
+    FileLogger(FileLogger&& rhs) = default;
+    FileLogger& operator=(FileLogger&& rhs) = default;
 
     void flush() noexcept override;
 

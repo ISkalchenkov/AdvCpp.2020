@@ -25,36 +25,20 @@ void error(const std::string& msg) {
     logger.error(msg);
 }
 
-BaseLoggerPtr create_file_logger(const std::string& path, Level lvl) {
-    return std::make_unique<FileLogger>(path, lvl);
+BaseLoggerPtr create_file_logger(const std::string& path, Level lvl, const LogModifier& mod) {
+    return std::make_unique<FileLogger>(path, lvl, mod);
 }
 
-BaseLoggerPtr create_stdout_logger(Level lvl) {
-    return std::make_unique<StdoutLogger>(lvl);
+BaseLoggerPtr create_stdout_logger(Level lvl, const LogModifier& mod) {
+    return std::make_unique<StdoutLogger>(lvl, mod);
 }
 
-BaseLoggerPtr create_stderr_logger(Level lvl) {
-    return std::make_unique<StderrLogger>(lvl);
+BaseLoggerPtr create_stderr_logger(Level lvl, const LogModifier& mod) {
+    return std::make_unique<StderrLogger>(lvl, mod);
 }
 
 void init(BaseLoggerPtr logger) {
     Logger::get_instance().set_global_logger(std::move(logger));
-}
-
-void set_color_mod(Modification mod) {
-    LogModifier::get_instance().set_color_mod(mod);
-}
-
-void set_weight_mod(Modification mod) {
-    LogModifier::get_instance().set_weight_mod(mod);
-}
-
-void set_time_mod(Modification mod) {
-    LogModifier::get_instance().set_time_mod(mod);
-}
-
-void set_all_mod(Modification mod) {
-    LogModifier::get_instance().set_all_mod(mod);
 }
 
 } // namespace log

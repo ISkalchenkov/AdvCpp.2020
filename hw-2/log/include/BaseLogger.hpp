@@ -3,19 +3,16 @@
 
 #include <string>
 
-namespace log {
+#include "LogModifier.hpp"
+#include "Level.hpp"
 
-enum class Level {
-    DEBUG,
-    INFO,
-    WARN,
-    ERROR
-};
+namespace log {
 
 class BaseLogger {
 public:
     BaseLogger() noexcept;
     explicit BaseLogger(Level lvl) noexcept;
+    explicit BaseLogger(Level lvl, const LogModifier& mod) noexcept;
     virtual ~BaseLogger() noexcept = default;
 
     void debug(const std::string& msg) noexcept;
@@ -31,6 +28,9 @@ private:
     virtual void log(const std::string& msg, Level lvl) noexcept = 0;
 
     Level level_;
+
+protected:
+     LogModifier mod_;
 };
 
 } // namespace log

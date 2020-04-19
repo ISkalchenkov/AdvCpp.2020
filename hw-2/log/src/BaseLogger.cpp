@@ -5,7 +5,12 @@ namespace log {
 BaseLogger::BaseLogger() noexcept : level_(Level::INFO) {
 }
 
-BaseLogger::BaseLogger(log::Level lvl) noexcept : level_(lvl) {
+BaseLogger::BaseLogger(Level lvl) noexcept : level_(lvl) {
+}
+
+BaseLogger::BaseLogger(log::Level lvl, const LogModifier& mod) noexcept
+    : level_(lvl)
+    , mod_(mod) {
 }
 
 void BaseLogger::debug(const std::string &msg) noexcept {

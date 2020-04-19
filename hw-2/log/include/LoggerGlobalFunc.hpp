@@ -11,9 +11,9 @@ void info(const std::string& msg);
 void warn(const std::string& msg);
 void error(const std::string& msg);
 
-BaseLoggerPtr create_file_logger(const std::string& path, Level lvl);
-BaseLoggerPtr create_stdout_logger(Level lvl);
-BaseLoggerPtr create_stderr_logger(Level lvl);
+BaseLoggerPtr create_file_logger(const std::string& path, Level lvl, const LogModifier& mod);
+BaseLoggerPtr create_stdout_logger(Level lvl, const LogModifier& mod);
+BaseLoggerPtr create_stderr_logger(Level lvl, const LogModifier& mod);
 
 void init(BaseLoggerPtr logger);
 
