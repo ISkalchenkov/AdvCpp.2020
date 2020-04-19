@@ -17,11 +17,6 @@ BaseLoggerPtr create_stderr_logger(Level lvl, const LogModifier& mod);
 
 void init(BaseLoggerPtr logger);
 
-void set_color_mod(Modification mod);
-void set_weight_mod(Modification mod);
-void set_time_mod(Modification mod);
-void set_all_mod(Modification mod);
-
 } // namespace log
 
 #endif // LOGGER_GLOBAL_FUNC_HPP

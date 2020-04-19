@@ -23,6 +23,7 @@ public:
 
     void set_all_mod(Modification mod) noexcept;
     std::string format(const std::string& msg, Level lvl) noexcept;
+
 private:
     Modification color_;
     Modification weight_;
