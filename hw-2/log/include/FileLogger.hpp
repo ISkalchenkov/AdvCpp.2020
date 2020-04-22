@@ -20,12 +20,12 @@ public:
     FileLogger(FileLogger&& rhs) = default;
     FileLogger& operator=(FileLogger&& rhs) = default;
 
-    void flush() noexcept override;
+    void flush() override;
 
 private:
     std::ofstream file_out_;
 
-    void log(const std::string& msg, Level lvl) noexcept override;
+    void log(const std::string& msg, Level lvl) override;
 };
 
 } // namespace log

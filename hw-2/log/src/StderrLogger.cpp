@@ -12,11 +12,11 @@ StderrLogger::StderrLogger(Level lvl, const LogModifier& mod) noexcept
     : BaseLogger(lvl, mod) {
 }
 
-void StderrLogger::flush() noexcept {
+void StderrLogger::flush() {
     std::cerr.flush();
 }
 
-void StderrLogger::log(const std::string &msg, Level lvl) noexcept {
+void StderrLogger::log(const std::string &msg, Level lvl) {
     if (lvl >= level()) {
         std::cerr << mod_.format(msg, lvl) << std::endl;
     }

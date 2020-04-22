@@ -17,12 +17,12 @@ class LogModifier {
 public:
     LogModifier() noexcept;
 
-    void set_color_mod(Modification mod) noexcept;
-    void set_weight_mod(Modification mod) noexcept;
-    void set_time_mod(Modification mod) noexcept;
+    void set_color_mod(Modification mod);
+    void set_weight_mod(Modification mod);
+    void set_time_mod(Modification mod);
 
-    void set_all_mod(Modification mod) noexcept;
-    std::string format(const std::string& msg, Level lvl) noexcept;
+    void set_all_mod(Modification mod);
+    std::string format(const std::string& msg, Level lvl);
 
 private:
     Modification color_;

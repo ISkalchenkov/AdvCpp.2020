@@ -15,17 +15,17 @@ public:
     explicit BaseLogger(Level lvl, const LogModifier& mod) noexcept;
     virtual ~BaseLogger() noexcept = default;
 
-    void debug(const std::string& msg) noexcept;
-    void info(const std::string& msg) noexcept;
-    void warn(const std::string& msg) noexcept;
-    void error(const std::string& msg) noexcept;
+    void debug(const std::string& msg);
+    void info(const std::string& msg);
+    void warn(const std::string& msg);
+    void error(const std::string& msg);
 
-    void set_level(Level lvl) noexcept;
-    Level level() const noexcept;
-    virtual void flush() noexcept = 0;
+    void set_level(Level lvl);
+    Level level() const;
+    virtual void flush() = 0;
 
 private:
-    virtual void log(const std::string& msg, Level lvl) noexcept = 0;
+    virtual void log(const std::string& msg, Level lvl) = 0;
 
     Level level_;
 

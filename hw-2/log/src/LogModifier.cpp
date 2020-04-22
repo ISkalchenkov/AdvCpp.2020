@@ -23,25 +23,25 @@ LogModifier::LogModifier() noexcept
     , time_ (Modification::OFF) {
 }
 
-void LogModifier::set_color_mod(Modification mod) noexcept {
+void LogModifier::set_color_mod(Modification mod) {
     color_ = mod;
 }
 
-void LogModifier::set_weight_mod(Modification mod) noexcept {
+void LogModifier::set_weight_mod(Modification mod) {
     weight_ = mod;
 }
 
-void LogModifier::set_time_mod(Modification mod) noexcept {
+void LogModifier::set_time_mod(Modification mod) {
     time_ = mod;
 }
 
-void LogModifier::set_all_mod(Modification mod) noexcept {
+void LogModifier::set_all_mod(Modification mod) {
     color_ = mod;
     weight_ = mod;
     time_ = mod;
 }
 
-std::string LogModifier::format(const std::string& msg, Level lvl) noexcept {
+std::string LogModifier::format(const std::string& msg, Level lvl) {
     std::ostringstream fmt_message;
     if (time_ == Modification::ON) {
         time_fmt(fmt_message);

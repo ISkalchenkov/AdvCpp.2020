@@ -11,10 +11,10 @@ public:
     explicit StderrLogger(Level lvl) noexcept;
     explicit StderrLogger(Level lvl, const LogModifier& mod) noexcept;
 
-    void flush() noexcept override;
+    void flush() override;
 
 private:
-    void log(const std::string& msg, Level lvl) noexcept override;
+    void log(const std::string& msg, Level lvl) override;
 };
 
 } // namespace log

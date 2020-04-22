@@ -17,11 +17,11 @@ FileLogger::FileLogger(const std::string &file_path, Level lvl, const LogModifie
     , BaseLogger(lvl, mod){
 }
 
-void FileLogger::flush() noexcept {
+void FileLogger::flush() {
     file_out_.flush();
 }
 
-void FileLogger::log(const std::string &msg, Level lvl) noexcept {
+void FileLogger::log(const std::string &msg, Level lvl) {
     if (lvl >= level()) {
         file_out_ << mod_.format(msg, lvl) << std::endl;
     }
