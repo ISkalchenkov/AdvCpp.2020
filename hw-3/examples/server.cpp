@@ -16,10 +16,7 @@ int main() {
         conn.readExact(buf.data(), 256);
         conn.writeExact(buf.c_str(), 256);
     }
-    catch (const tcp::SocketError& err) {
-        std::cout << err.what() << std::endl;
-    }
-    catch (const tcp::AddressError& err) {
-        std::cout << err.what() << std::endl;
+    catch (const tcp::BasicException& err) {
+        std::cerr << err.what() << std::endl;
     }
 }

@@ -7,8 +7,7 @@
 
 namespace tcp {
 
-Server::Server(const std::string& address, uint16_t port, int max_connect)
-    : is_opened_(true) {
+Server::Server(const std::string& address, uint16_t port, int max_connect) {
     sockaddr_in addr{};
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);
@@ -24,9 +23,7 @@ Server::Server(const std::string& address, uint16_t port, int max_connect)
 }
 
 Server::Server(Server&& rhs) noexcept
-    : socket_(std::move(rhs.socket_))
-    , is_opened_(rhs.is_opened_) {
-    rhs.is_opened_ = false;
+    : socket_(std::move(rhs.socket_)) {
 }
 
 Server& Server::operator=(Server &&rhs) noexcept {
@@ -34,15 +31,8 @@ Server& Server::operator=(Server &&rhs) noexcept {
         return *this;
     }
     socket_ = std::move(rhs.socket_);
-    is_opened_ = rhs.is_opened_;
-    rhs.is_opened_ = false;
     return *this;
 }
-
-Server::~Server() noexcept {
-    close();
-}
-
 
 void Server::open(const std::string& address, uint16_t port, int max_connect) {
     sockaddr_in addr{};
@@ -79,16 +69,12 @@ Connection Server::accept() {
     return Connection(fd, client_addr);
 }
 
-
 bool Server::is_opened() const {
-    return is_opened_;
+    return socket_.is_opened();
 }
 
 void Server::close() {
-    if (is_opened_) {
-        socket_.close();
-        is_opened_ = false;
-    }
+    socket_.close();
 }
 
 } // namespace tcp

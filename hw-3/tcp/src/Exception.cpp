@@ -5,24 +5,32 @@
 
 namespace tcp {
 
-SocketError::SocketError() :message_(strerror(errno)) {
+BasicException::BasicException(const std::string& message)
+    :message_(message) {
+}
+
+const char * BasicException::what() const noexcept {
+    return message_.c_str();
 }
 
 SocketError::SocketError(const std::string& message)
-    : message_(message + strerror(errno)) {
+    : BasicException(message + strerror(errno)) {
 }
-
-const char * SocketError::what() const noexcept {
-    return message_.c_str();
-}
-
 
 AddressError::AddressError(const std::string& message)
-    : message_(message) {
+    : BasicException(message) {
 }
 
-const char* AddressError::what() const noexcept {
-    return message_.c_str();
+ReadError::ReadError(const std::string& message)
+    : BasicException(message + strerror(errno)) {
+}
+
+WriteError::WriteError(const std::string& message)
+        : BasicException(message + strerror(errno)) {
+}
+
+EofError::EofError(const std::string& message)
+        : BasicException(message) {
 }
 
 } // namespace tcp

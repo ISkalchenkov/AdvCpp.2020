@@ -6,23 +6,40 @@
 
 namespace tcp {
 
-class SocketError : public std::exception {
+class BasicException : public std::exception {
 public:
-    SocketError();
-    explicit SocketError(const std::string& message);
+    explicit BasicException(const std::string& message);
+    virtual ~BasicException() noexcept = default;
+
     const char* what() const noexcept override;
 
 private:
     std::string message_;
 };
 
-class AddressError : public std::exception  {
+class SocketError : public BasicException {
+public:
+    explicit SocketError(const std::string& message);
+};
+
+class AddressError : public BasicException {
 public:
     explicit AddressError(const std::string& message);
-    const char* what() const noexcept override;
+};
 
-private:
-    std::string message_;
+class ReadError : public BasicException {
+public:
+    explicit ReadError(const std::string& message);
+};
+
+class WriteError : public BasicException {
+public:
+    explicit WriteError(const std::string& message);
+};
+
+class EofError : public BasicException {
+public:
+    explicit EofError(const std::string& message);
 };
 
 } // namespace tcp

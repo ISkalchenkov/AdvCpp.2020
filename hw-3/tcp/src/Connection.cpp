@@ -5,12 +5,12 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <utility>
 
 namespace tcp {
 
 Connection::Connection(const std::string& address, uint16_t port)
-    : is_opened_(true)
-    , dst_addr_(address)
+    : dst_addr_(address)
     , dst_port_(port) {
     sockaddr_in addr{};
     addr.sin_family = AF_INET;
@@ -27,9 +27,7 @@ Connection::Connection(const std::string& address, uint16_t port)
 Connection::Connection(Connection&& rhs) noexcept
     : socket_(std::move(rhs.socket_))
     , dst_addr_(std::move(rhs.dst_addr_))
-    , dst_port_(rhs.dst_port_)
-    , is_opened_(rhs.is_opened_) {
-    rhs.is_opened_ = false;
+    , dst_port_(std::exchange(rhs.dst_port_, 0)) {
 }
 
 Connection& Connection::operator=(Connection &&rhs) noexcept {
@@ -38,15 +36,9 @@ Connection& Connection::operator=(Connection &&rhs) noexcept {
     }
     socket_ = std::move(rhs.socket_);
     dst_addr_ = std::move(rhs.dst_addr_);
-    dst_port_ = rhs.dst_port_;
-    is_opened_ = rhs.is_opened_;
-    rhs.is_opened_ = false;
+    dst_port_ = std::exchange(rhs.dst_port_, 0);
 
     return *this;
-}
-
-Connection::~Connection() noexcept {
-    close();
 }
 
 void Connection::connect(const std::string& address, uint16_t port) {
@@ -67,32 +59,27 @@ void Connection::connect(const std::string& address, uint16_t port) {
 
     dst_addr_ = address;
     dst_port_ = port;
-    is_opened_ = true;
 }
 
 Connection::Connection(int fd, sockaddr_in client_addr)
     : socket_(fd)
     , dst_port_(ntohs(client_addr.sin_port))
-    , dst_addr_(inet_ntoa(client_addr.sin_addr))
-    , is_opened_(true) {
+    , dst_addr_(inet_ntoa(client_addr.sin_addr)) {
 }
 
 
 void Connection::close() {
-    if (is_opened_) {
-        socket_.close();
-        is_opened_ = false;
-    }
+    socket_.close();
 }
 
 bool Connection::is_opened() const {
-    return is_opened_;
+    return socket_.is_opened();
 }
 
 size_t Connection::write(const void *data, size_t len) {
     ssize_t bytes_written = ::write(socket_.get_fd(), data, len);
     if (bytes_written == -1) {
-        throw SocketError("Write error: ");
+        throw WriteError("Write error: ");
     }
     return bytes_written;
 }
@@ -109,9 +96,9 @@ void Connection::writeExact(const void *data, size_t len) {
 size_t Connection::read(void *data, size_t len) {
     ssize_t bytes_read = ::read(socket_.get_fd(), data, len);
     if (bytes_read == -1) {
-        throw SocketError("Read error: ");
+        throw ReadError("Read error: ");
     } else if (bytes_read == 0) {
-        is_opened_ = false;
+        throw EofError("End of file reached");
     }
     return bytes_read;
 }
@@ -146,7 +133,6 @@ void Connection::set_receive_timeout(int sec) {
         throw SocketError("Error setting receive timeout: ");
     }
 }
-
 
 uint16_t Connection::get_dst_port() const {
     return dst_port_;

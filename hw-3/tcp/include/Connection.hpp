@@ -18,8 +18,6 @@ public:
     Connection(Connection&& rhs) noexcept;
     Connection& operator=(Connection&& rhs) noexcept;
 
-    ~Connection() noexcept;
-
     void connect(const std::string& address, uint16_t port);
     void close();
 
@@ -42,7 +40,6 @@ private:
 
 private:
     Socket socket_;
-    bool is_opened_;
 
     uint16_t dst_port_;
     std::string dst_addr_;

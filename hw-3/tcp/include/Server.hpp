@@ -15,8 +15,6 @@ public:
     Server& operator=(const Server& rhs) = delete;
     Server& operator=(Server&& rhs) noexcept;
 
-    ~Server() noexcept;
-
     void open(const std::string& address, uint16_t port, int max_connect = 0);
     void close();
 
@@ -27,7 +25,6 @@ public:
 
 private:
     Socket socket_;
-    bool is_opened_;
 };
 
 } // namespace tcp

@@ -3,6 +3,8 @@
 
 #include <sys/socket.h>
 #include <unistd.h>
+#include <utility>
+#include <iostream>
 
 namespace tcp {
 
@@ -18,8 +20,7 @@ Socket::Socket(int fd)
 }
 
 Socket::Socket(Socket&& rhs) noexcept
-    : fd_(rhs.fd_) {
-    rhs.fd_ = -1;
+    : fd_(std::exchange(rhs.fd_, -1)) {
 }
 
 Socket& Socket::operator=(Socket &&rhs) noexcept {
@@ -27,13 +28,17 @@ Socket& Socket::operator=(Socket &&rhs) noexcept {
         return *this;
     }
     this->close();
-    this->fd_ = rhs.fd_;
-    rhs.fd_ = -1;
+    this->fd_ = std::exchange(rhs.fd_, -1);
+
     return *this;
 }
 
 Socket::~Socket() noexcept {
-    close();
+    try {
+        close();
+    } catch (const SocketError& err) {
+        std::cerr << err.what() << std::endl;
+    }
 }
 
 int Socket::get_fd() const {
@@ -56,9 +61,10 @@ void Socket::close() {
     if (fd_ < 0) {
         return;
     }
-    ::close(fd_);
+    if (::close(fd_) < 0) {
+        throw SocketError("Error closing socket: ");
+    }
     fd_ = -1;
 }
-
 
 } // namespace tcp
