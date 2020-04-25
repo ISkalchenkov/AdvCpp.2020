@@ -62,6 +62,7 @@ void Socket::close() {
         return;
     }
     if (::close(fd_) < 0) {
+        fd_ = -1;
         throw SocketError("Error closing socket: ");
     }
     fd_ = -1;
