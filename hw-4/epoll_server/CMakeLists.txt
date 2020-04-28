@@ -2,7 +2,7 @@ set(EPOLL_SERVER_LIB_SRCS
         "src/Connection.cpp"
         "src/Server.cpp"
         "src/Exception.cpp"
-        "src/Descriptor.cpp"
+        "src/FileDescriptor.cpp"
 )
 
 add_library(${EPOLL_SERVER_LIB_NAME} STATIC ${EPOLL_SERVER_LIB_SRCS})

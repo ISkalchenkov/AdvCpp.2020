@@ -1,23 +1,44 @@
+#include <stdexcept>
 #include <cstring>
 
 #include "Exception.hpp"
 
 namespace epoll_server {
 
-BasicException::BasicException(const std::string& message)
-        : message_(message) {
+RuntimeError::RuntimeError(const std::string& message)
+    : runtime_error(message) {
 }
 
-const char *BasicException::what() const noexcept {
-    return message_.c_str();
+InvalidArgument::InvalidArgument(const std::string& message)
+    : invalid_argument(message) {
 }
 
 SocketError::SocketError(const std::string& message)
-        : BasicException(message + strerror(errno)) {
+    : RuntimeError(message + strerror(errno)) {
 }
 
 AddressError::AddressError(const std::string& message)
-    : BasicException(message) {
-    }
-    
+    : InvalidArgument(message) {
+}
+
+CloseError::CloseError(const std::string& message)
+    : RuntimeError(message + strerror(errno)) {
+}
+
+EpollError::EpollError(const std::string& message)
+    : RuntimeError(message + strerror(errno)) {
+}
+
+ReadError::ReadError(const std::string& message)
+    : RuntimeError(message + strerror(errno)) {
+}
+
+WriteError::WriteError(const std::string& message)
+    : RuntimeError(message + strerror(errno)) {
+}
+
+ConnectionError::ConnectionError(const std::string& message)
+    : RuntimeError(message) {
+}
+
 } // namespace epoll_server
