@@ -21,39 +21,41 @@ int main(int argc, char* argv[]) {
         }
 
         uint32_t event = conn.get_event();
-        if (event & EPOLLHUP || event & EPOLLERR) {
+        if (event & EPOLLHUP || event & EPOLLERR || event & EPOLLRDHUP) {
             std::cout << "Client disconnected. Ip = " << conn.get_dst_addr()
-                << " port = " << conn.get_dst_port();
+                << " port = " << conn.get_dst_port() << std::endl;
+            return;
         }
 
         if (event & EPOLLIN) {
             std::string buff(DATA_SIZE, '\0');
             try {
                 size_t bytes_read = conn.read(buff.data(), DATA_SIZE);
+                buff.resize(bytes_read);
                 std::cout << "Bytes read: " << bytes_read << ". Ip = "
-                    << conn.get_dst_addr() << " port = " << conn.get_dst_port() << std::endl;
+                          << conn.get_dst_addr() << " port = " << conn.get_dst_port() << std::endl;
 
-            } catch (const epoll_server::ConnectionError& err) {
+            } catch (const epoll_server::ConnectionError &err) {
                 std::cout << err.what() << " Ip = " << conn.get_dst_addr()
-                    << " port = " << conn.get_dst_port() << std::endl;
-                throw err;
-            } catch (const epoll_server::ReadError& err) {
+                          << " port = " << conn.get_dst_port() << std::endl;
+                return;
+            } catch (const epoll_server::ReadError &err) {
                 std::cerr << err.what();
                 throw err;
             }
-        }
 
-        if (event & EPOLLOUT) {
             try {
-                size_t bytes_written = conn.write(conn.get_input_data().c_str(), conn.input_data_length());
+                size_t bytes_written = conn.write(buff.c_str(), buff.length());
                 std::cout << "Bytes written: " << bytes_written << ". Ip = "
-                         << conn.get_dst_addr() << " port = " << conn.get_dst_port() << std::endl;
-            } catch (const epoll_server::WriteError& err) {
+                          << conn.get_dst_addr() << " port = " << conn.get_dst_port() << std::endl;
+
+            } catch (const epoll_server::WriteError &err) {
                 std::cerr << err.what() << std::endl;
                 throw err;
             }
         }
     };
+
     try {
         epoll_server::Server server(ip_address, port, max_connection, handler);
         server.start();

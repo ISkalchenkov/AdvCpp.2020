@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <utility>
 #include <cstring>
+#include <sys/epoll.h>
 
 namespace epoll_server {
 
@@ -14,8 +15,9 @@ Connection::Connection(const std::string& address, uint16_t port) {
     connect(address, port);
 }
 
-Connection::Connection(int fd, const sockaddr_in& client_addr)
+Connection::Connection(int fd, int epoll_fd, const sockaddr_in& client_addr)
         : socket_(fd)
+        , epoll_fd_(epoll_fd)
         , dst_port_(ntohs(client_addr.sin_port))
         , dst_addr_(inet_ntoa(client_addr.sin_addr)) {
 }
@@ -162,6 +164,15 @@ void Connection::set_event(uint32_t event) {
 
 uint32_t Connection::get_event() const {
     return event_;
+}
+
+void Connection::modify_epoll(uint32_t events) {
+    epoll_event event{};
+    event.data.fd = socket_.get_fd();
+    event.events = events;
+    if (::epoll_ctl(epoll_fd_, EPOLL_CTL_MOD, socket_.get_fd(), &event) < 0) {
+        throw EpollError("Epoll_ctl error: ");
+    }
 }
 
 } // namespace epoll_server

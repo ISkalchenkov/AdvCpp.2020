@@ -2,6 +2,7 @@
 #include "Exception.hpp"
 
 #include <arpa/inet.h>
+#include <iostream>
 
 namespace epoll_server {
 
@@ -111,9 +112,9 @@ void Server::accept_clients() {
         clients_.emplace(
                 std::piecewise_construct,
                 std::forward_as_tuple(fd),
-                std::forward_as_tuple(fd, client_addr));
+                std::forward_as_tuple(fd, epoll_fd_.get_fd(), client_addr));
 
-        epoll_ctl(fd, EPOLLIN, CtlOption::ADD);
+        epoll_ctl(fd, EPOLLIN | EPOLLRDHUP, CtlOption::ADD);
     }
 }
 
@@ -127,7 +128,7 @@ void Server::handle_client(int fd, uint32_t event) {
         clients_.erase(fd);
     }
 
-    if (event & EPOLLHUP || event & EPOLLERR) {
+    if (event & EPOLLHUP || event & EPOLLERR || event & EPOLLRDHUP) {
         clients_.erase(fd);
         return;
     }

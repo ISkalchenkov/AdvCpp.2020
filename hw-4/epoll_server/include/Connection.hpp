@@ -11,7 +11,7 @@ namespace epoll_server {
 class Connection {
 public:
     Connection(const std::string& address, uint16_t port);
-    Connection(int fd, const sockaddr_in& client_addr);
+    Connection(int fd, int epoll_fd, const sockaddr_in& client_addr);
 
     Connection(const Connection& rhs) = delete;
     Connection& operator=(const Connection& rhs) = delete;
@@ -37,11 +37,15 @@ public:
     [[nodiscard]] const std::string& get_input_data() const;
     [[nodiscard]] bool is_opened() const;
 
+    void modify_epoll(uint32_t event);
+
 private:
     int create_socket();
 
 private:
     FileDescriptor socket_;
+    int epoll_fd_;
+
     std::string input_data_;
     uint32_t event_;
     uint16_t dst_port_;
