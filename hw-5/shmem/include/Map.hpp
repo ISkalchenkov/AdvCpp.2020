@@ -9,6 +9,9 @@
 
 namespace shmem {
 
+    using string_allocator = Allocator<char>;
+    using string = std::basic_string<char, std::char_traits<char>, string_allocator>;
+
 template <class Key, class T, class Compare = std::less<Key>>
 class Map {
 public:
@@ -19,20 +22,22 @@ public:
     using allocator_type = Allocator<value_type>;
     using shared_map = std::map<key_type, mapped_type, Compare, allocator_type>;
 
-    using string_allocator = Allocator<char>;
-    using shared_string = std::basic_string<char, std::char_traits<char>, string_allocator>;
-
     using iterator = typename shared_map::iterator;
     using const_iterator = typename shared_map::const_iterator;
 
+private:
+    ShmemPtr<char> shared_memory_;
+    shared_map* map_;
+    Semaphore* semaphore_;
+
 public:
-    explicit Map(size_t map_length)
-        : shared_memory_(make_shmem<char>(map_length))
+    explicit Map(size_t shared_memory_size)
+        : shared_memory_(make_shmem<char>(shared_memory_size))
         , semaphore_(nullptr) {
 
         auto* state = reinterpret_cast<AllocState*>(shared_memory_.get());
         state->start = static_cast<char*>(shared_memory_.get()) + sizeof(AllocState);
-        state->end = static_cast<char*>(shared_memory_.get()) + map_length;
+        state->end = static_cast<char*>(shared_memory_.get()) + shared_memory_size;
 
         semaphore_ = new(state->start) Semaphore(true, 1);
         state->start = static_cast<char*>(state->start) + sizeof(Semaphore);
@@ -45,6 +50,13 @@ public:
     void destroy() {
         semaphore_->destroy();
         map_->~map();
+    }
+
+    // Allocator
+
+    auto get_allocator() const {
+        SemaphoreLock lock(*semaphore_);
+        return map_->get_allocator();
     }
 
     // Iterators
@@ -137,11 +149,6 @@ public:
         SemaphoreLock lock(*semaphore_);
         return map_->erase(first, last);
     }
-
-private:
-    ShmemPtr<char> shared_memory_;
-    shared_map* map_;
-    Semaphore* semaphore_;
 };
 
 } // namespace shmem
