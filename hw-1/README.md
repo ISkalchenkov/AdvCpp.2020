@@ -1,7 +1,7 @@
 # AdvCpp.2020
-Домашнее задание №1
+### Домашнее задание №1
 
-    Условие:
+#### Условие:
 Нужно реализовать класс Process, согласно интерфейсу.
 Класс представляет собой процесс операционной системы
 Linux.
@@ -14,11 +14,12 @@ Linux.
     Все исключительные ситуации должны быть корректно
 описаны и передавать управление вызывающему коду
 
-Интерфейс процесса
+### Интерфейс процесса
 
+```c++
 class Process {  
 public:  
-	explicit Process(const std::string &path);  
+    explicit Process(const std::string &path);  
     ~Process();  
     size_t write(const void *data, size_t len);  
     void writeExact(const void *data, size_t len);  
@@ -27,4 +28,5 @@ public:
     bool isReadable();  
     void closeStdin();  
     void close();  
-};  
+};
+```
