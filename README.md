@@ -6,3 +6,4 @@
 - [*hw-3*](https://github.com/ISkalchenkov/AdvCpp.2020/tree/master/hw-3) *tcp*
 - [*hw-4*](https://github.com/ISkalchenkov/AdvCpp.2020/tree/master/hw-4) *epoll_server*
 - [*hw-5*](https://github.com/ISkalchenkov/AdvCpp.2020/tree/master/hw-5) *shmem*
+- [*HTTPFramework*](https://github.com/ISkalchenkov/HttpFramework)
